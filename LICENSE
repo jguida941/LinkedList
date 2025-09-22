@@ -23,6 +23,6 @@ SOFTWARE.
 
 Attribution
 
-The CSV parser was provided by my CS professor Romain Sylvian as part of class material.
+The CSV parser was provided by Romain Sylvian as part of my class material for school.
 All other functionality including the linked list implementation, sorting algorithms, bug fixes, documentation, and Homebrew packaging was designed, built, and maintained by Justin Guida.
 

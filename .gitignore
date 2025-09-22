@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+# CMake build folders
+/build/
+/build-*/
+
+# CLion build folders (keep sample CSVs only)
+/cmake-build-*/
+!cmake-build-debug/
+cmake-build-debug/*
+!cmake-build-debug/*.csv
+!cmake-build-debug/*.CSV
+
+# CMake generated files (in case someone configures in-tree)
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.ninja
+.ninja_*
+Testing/
+compile_commands.json
+
+# IDE/editor
+/.idea/
+.vscode/
+*.swp
+*.swo

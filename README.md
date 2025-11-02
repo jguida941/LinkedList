@@ -126,5 +126,5 @@ Linked_List [csvPath] [bidId]
 - Searching is linear (`O(n)`); for very large datasets a different structure (hash map, balanced tree) might be warranted.
 
 ## License & Attribution
-- Source code is © 2023 Justin Guida (adapted from SNHU coursework).
+- Source code is © 2025 Justin Guida (adapted from SNHU coursework).
 - `CSVparser` is bundled locally; no external runtime dependencies are required.

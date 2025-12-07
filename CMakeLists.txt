@@ -4,11 +4,11 @@ project(Linked_List)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Linked_List
-        LinkedList.cpp
-        CSVparser.cpp
+        src/LinkedList.cpp
+        src/CSVparser.cpp
 )
 
-target_include_directories(Linked_List PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(Linked_List PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Simple run target (uses sample CSV in repo)
 add_custom_target(run

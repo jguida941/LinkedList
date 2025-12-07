@@ -2,7 +2,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BUILD_DIR="$SCRIPT_DIR/build"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+BUILD_DIR="$PROJECT_DIR/build"
 
 # Optionally resize the terminal window for readability
 # Override with env: TARGET_COLS=140 TARGET_ROWS=40 ./run-mac.command
@@ -35,20 +36,20 @@ if ! command -v cmake >/dev/null 2>&1; then
   exit 1
 fi
 
-cmake -S "$SCRIPT_DIR" -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=Release
+cmake -S "$PROJECT_DIR" -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=Release
 cmake --build "$BUILD_DIR" --config Release
 
 CSV_PATH="${1:-eBid_Monthly_Sales.csv}"
 BID_ID="${2:-98109}"
 
-# If not found at project root, try CLion's debug folder bundled in this repo
-if [[ ! -f "$SCRIPT_DIR/$CSV_PATH" && -f "$SCRIPT_DIR/cmake-build-debug/$CSV_PATH" ]]; then
-  CSV_PATH="cmake-build-debug/$CSV_PATH"
+# If not found at project root, try data folder
+if [[ ! -f "$PROJECT_DIR/$CSV_PATH" && -f "$PROJECT_DIR/data/$CSV_PATH" ]]; then
+  CSV_PATH="data/$CSV_PATH"
 fi
 
 # Make CSV path absolute so it works regardless of current directory
 if [[ "$CSV_PATH" != /* ]]; then
-  CSV_PATH="$SCRIPT_DIR/$CSV_PATH"
+  CSV_PATH="$PROJECT_DIR/$CSV_PATH"
 fi
 
 # Validate CSV existence early and give a clear message

@@ -1,127 +1,207 @@
-# Linked List Bid Loader
+# Linked List Bid Manager
 
-Linked_List is a C++20 console application that loads municipal bid data from CSV files into a custom singly linked list. The interactive menu lets you append manual entries, import a file, list bids in a formatted table, search, and remove by ID while timing key operations. The project bundles a lightweight CSV parser, Homebrew packaging, and helper scripts so you can build and run quickly on macOS, Linux, or Windows.
+A C++ console application that manages municipal bid data using a custom singly linked list. Built as a data structures project, it demonstrates linked list operations, CSV parsing, and terminal UI design.
 
-## Highlights
-- Custom singly linked list with `Append`, `Prepend`, `Remove`, `Search`, formatted printing, and size tracking.
-- CSV ingestion via `CSVparser` (included) that understands quoted fields, embedded commas, and header rows.
-- Interactive menu with colorized, width-aware output and basic performance timing for load/search actions.
-- Homebrew tap for one-command installs on macOS, plus convenience launch scripts for macOS (`run-mac.command`) and Windows (`run-win.bat`).
-- Ready-to-run sample dataset: `cmake-build-debug/eBid_Monthly_Sales.csv` (used by default when you do not pass a path).
+## Contents
 
-## Installation Options
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Usage](#usage)
+- [How It Works](#how-it-works)
+- [Project Structure](#project-structure)
+- [Requirements](#requirements)
+- [Troubleshooting](#troubleshooting)
 
-### Homebrew Tap (recommended)
-After publishing the tap repository:
+## Features
+
+- **Custom linked list implementation** - Append, prepend, search, remove, and print operations
+- **CSV file import** - Load thousands of bids from CSV files with quoted fields and embedded commas
+- **Colorized terminal output** - Auto-detects dark/light terminal themes, adapts colors accordingly
+- **Performance metrics** - Shows execution time for load and search operations
+- **Responsive layout** - Adjusts output width based on terminal size
+- **Cross-platform** - Works on macOS, Linux, and Windows
+
+## Quick Start
+
+### Homebrew (macOS)
+
 ```bash
 brew tap jguida941/linkedlist
 brew install linked-list
-```
-- To build from the latest commit instead of a tagged release: `brew install --HEAD linked-list`.
-- The formula installs the `linked-list` executable into your PATH and copies the sample CSVs to `$(brew --prefix)/share/linked-list`.
-- Run the app with the bundled sample data:
-  ```bash
-  linked-list "$(brew --prefix)/share/linked-list/eBid_Monthly_Sales.csv" 98109
-  ```
-- Both command-line arguments are optional; omit the CSV path and/or bid ID to fall back to the defaults shown in `LinkedList.cpp`.
 
-### Clone and Build from Source
+# Run with the included sample data
+linked-list "$(brew --prefix)/share/linked-list/eBid_Monthly_Sales.csv"
+```
+
+### Build from Source
+
+**macOS / Linux:**
 ```bash
 git clone https://github.com/jguida941/LinkedList.git
 cd LinkedList
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
-./build/Linked_List cmake-build-debug/eBid_Monthly_Sales.csv 98109
-```
-- Requires CMake 3.16+ and a C++20-capable compiler (clang++ 11+, Apple Clang 13+, MSVC 2022, or g++ 10+).
-- On Windows, use either Visual Studio with the “Desktop development with C++” workload or MinGW-w64.
-- Omit the CSV/ID arguments to fall back to `cmake-build-debug/eBid_Monthly_Sales.csv` and bid ID `98109`.
-- `cmake --build build --target run --config Release` executes the helper target defined in `CMakeLists.txt`.
-
-## Repository Tour
-- `LinkedList.cpp` – main application, menu loop, list implementation, console helpers.
-- `CSVparser.cpp/.hpp` – self-contained CSV reader used by `loadBids`.
-- `CMakeLists.txt` – builds a single executable target named `Linked_List` and defines a `run` helper target.
-- `run-mac.command`, `run-win.bat` – double-clickable launchers that handle CMake builds and default arguments.
-- `scripts/install-macos.sh` – optional installer/runner that can symlink a CLI into `/usr/local/bin`.
-- `HomebrewFormula/linked-list.rb` – Homebrew tap formula for distributing source builds.
-- `build/`, `cmake-build-debug/`, `dist/` – sample or generated artefacts; safe to remove when doing a clean build.
-
-## Quick Start Reference
-
-### macOS / Linux (Terminal)
-```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
-./build/Linked_List cmake-build-debug/eBid_Monthly_Sales.csv 98109
+cmake --build build
+./build/Linked_List
 ```
 
-### Windows (PowerShell or Developer Command Prompt)
-**Visual Studio generator**
+**Windows (Visual Studio):**
 ```powershell
+git clone https://github.com/jguida941/LinkedList.git
+cd LinkedList
 cmake -S . -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build --config Release
-build/Release/Linked_List.exe cmake-build-debug/eBid_Monthly_Sales.csv 98109
+.\build\Release\Linked_List.exe
 ```
 
-**MinGW Makefiles**
+**Windows (MinGW):**
 ```powershell
 cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
-build/Linked_List.exe cmake-build-debug/eBid_Monthly_Sales.csv 98109
+cmake --build build
+.\build\Linked_List.exe
 ```
 
-### Convenience Scripts
-- `./run-mac.command [csvPath] [bidId]`
-  - Resizes the terminal (configurable via `TARGET_COLS`/`TARGET_ROWS`), ensures CMake is installed, builds in `./build`, resolves CSV paths (including `cmake-build-debug/<file>`), and launches the executable. Keeps the window open when started via Finder.
-- `run-win.bat [csvPath] [bidId]`
-  - Tries the Visual Studio generator first, falls back to MinGW, validates the CSV path, resizes the console, and launches the built binary.
-- `bash scripts/install-macos.sh [--link] [--run] [--csv path] [--bid id]`
-  - Intended for a published repo: configures/builds Release binaries, optionally symlinks `/usr/local/bin/linked-list`, and can run the app in one shot.
+### One-Click Scripts
 
-## Command-Line Interface
+For convenience, you can double-click these scripts to build and run automatically:
+- **macOS:** `scripts/run-mac.command`
+- **Windows:** `scripts/run-win.bat`
+
+These scripts handle the CMake build process and locate the CSV files for you.
+
+## Usage
+
+```bash
+./build/Linked_List [csv_path]
 ```
-Linked_List [csvPath] [bidId]
+
+**Arguments:**
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `csv_path` | Auto-detected | Path to a CSV file with bid data |
+
+The program automatically searches for `eBid_Monthly_Sales.csv` in common locations (`data/`, `../data/`, etc.), so you can run it without arguments from most directories.
+
+### Menu
+
 ```
-- `csvPath` – optional path to a CSV file containing the expected bid schema. Default: `cmake-build-debug/eBid_Monthly_Sales.csv` relative to the repo root.
-- `bidId` – optional bid identifier used by the "Find" and "Remove" menu options. Default: `98109`.
+┌────────────────────────┐
+│       BID SYSTEM       │
+├────────────────────────┤
+│ [1] Enter Bid          │
+│ [2] Load Bids          │
+│ [3] Show All           │
+│ [4] Find Bid           │
+│ [5] Remove Bid         │
+├────────────────────────┤
+│ [9] Exit               │
+└────────────────────────┘
+```
 
-### Menu flow
-1. Enter a bid manually (appended to the list).
-2. Load bids from CSV (timed in milliseconds/seconds).
-3. Display all bids in a table with alignment, truncation, and compact mode for narrow terminals.
-4. Find bid by the active `bidId` (timed in microseconds/seconds).
-5. Remove bid by the active `bidId` if present.
-9. Exit.
+- **[1] Enter Bid** - Manually add a new bid (checks for duplicates)
+- **[2] Load Bids** - Import bids from the CSV file
+- **[3] Show All** - Display all loaded bids
+- **[4] Find Bid** - Search for a bid by ID
+- **[5] Remove Bid** - Delete a bid by ID
+- **[9] Exit** - Quit the program
 
-## Data Expectations
-- CSV parser treats the first row as headers and supports quoted values with embedded commas.
-- Columns used by `loadBids` (based on the bundled sample dataset):
-  - `title` → column 0
-  - `bidId` → column 1
-  - `amount` → column 4 (e.g. `$123.45`, cleaned by `strToDouble`)
-  - `fund` → column 8
-- Loading adds bids to memory only; exiting discards changes. CSV write-back is not implemented.
+### Color Themes
 
-## Terminal Experience
-- Colors are controlled by the `COLOR_THEME` environment variable: `light` (default), `dark`, `mono`, or `none`.
-- `run-mac.command` and `run-win.bat` honor `TARGET_COLS` / `TARGET_ROWS` to request a wider terminal for the table output.
-- When width drops below ~80 columns, the app switches to a compact two-line layout so rows do not wrap.
+The app detects your terminal background automatically. If colors look off, you can override:
 
-## Development Notes
-- The project defaults to Release builds in scripts for faster execution; use `-DCMAKE_BUILD_TYPE=Debug` if you prefer debug symbols.
-- `LinkedList.cpp` uses `<chrono>` for higher-resolution search timing and `<time.h>` for the historical load timer to match the original coursework requirements.
-- Memory management is manual; the destructor walks the list and frees nodes, so avoid copying `LinkedList` instances by value.
-- The CSV parser exposes row access and mutation helpers beyond what the main program currently uses, which makes it easy to extend the CLI for editing or exporting data.
+```bash
+# For dark terminals (bright colors)
+export COLOR_THEME=dark
+
+# For light terminals (darker colors)
+export COLOR_THEME=light
+
+# Disable colors entirely
+export COLOR_THEME=mono
+```
+
+## How It Works
+
+### Linked List
+
+The core data structure is a singly linked list with head and tail pointers:
+
+- **Append** - O(1) using tail pointer
+- **Prepend** - O(1) by updating head
+- **Search** - O(n) linear traversal
+- **Remove** - O(n) to find, O(1) to unlink
+- **Size tracking** - O(1) with counter variable
+
+Each node stores a `Bid` struct with ID, title, fund name, and dollar amount.
+
+### CSV Parser
+
+The bundled `CSVparser` handles:
+- Header row detection
+- Quoted fields with embedded commas
+- Dollar amounts with `$` symbols (stripped automatically)
+
+The sample dataset (`eBid_Monthly_Sales.csv`) contains ~12,000 municipal bid records.
+
+### Terminal Colors
+
+Colors are set using ANSI escape codes with 256-color support:
+- Dark mode: soft pastels that pop on dark backgrounds
+- Light mode: darker shades that stay readable on white
+- Mono mode: plain text for accessibility or piping to files
+
+## Project Structure
+
+```
+LinkedList/
+├── src/
+│   ├── LinkedList.cpp      # Main program, linked list, menu loop
+│   ├── CSVparser.cpp       # CSV file parser
+│   └── CSVparser.hpp
+├── data/
+│   ├── eBid_Monthly_Sales.csv          # ~12,000 bid records
+│   └── eBid_Monthly_Sales_Dec_2016.csv # Smaller sample
+├── scripts/
+│   ├── run-mac.command     # macOS build & run script
+│   ├── run-win.bat         # Windows build & run script
+│   └── install-macos.sh    # Optional CLI installer
+├── HomebrewFormula/
+│   └── linked-list.rb      # Homebrew tap formula
+├── CMakeLists.txt          # CMake build configuration
+├── LICENSE                 # MIT License
+└── README.md
+```
+
+## Requirements
+
+**Build tools:**
+- CMake 3.16 or newer
+- C++20 compatible compiler:
+  - macOS: Xcode 13+ (Apple Clang 13+)
+  - Linux: GCC 10+ or Clang 11+
+  - Windows: Visual Studio 2022 or MinGW-w64
+
+**Installing CMake:**
+```bash
+# macOS
+brew install cmake
+
+# Ubuntu/Debian
+sudo apt install cmake build-essential
+
+# Windows
+# Install via Visual Studio Installer, or download from cmake.org
+```
 
 ## Troubleshooting
-- **"Failed to open" / "No Data"** – verify the CSV path; scripts will also attempt `cmake-build-debug/<file>` when run from the repo root.
-- **Missing CMake** – install via `brew install cmake` (macOS), the Visual Studio installer (Windows), or your Linux package manager.
-- **ANSI color codes visible** – set `COLOR_THEME=mono` (or `none`) or enable VT sequence support in the Windows console.
-- **Executable not found after build** – clean `build/` and re-run CMake; multi-config generators output under `build/<Config>/Linked_List`.
-- **`CSVparser` is bundled locally**; no external runtime dependencies are required.
 
-## Known Limitations & Ideas
-- The active bid ID is stored in memory and only changeable via the second command-line argument today.
-- All changes are ephemeral; saving back to CSV or exporting a filtered list would be a natural extension.
-- Searching is linear (`O(n)`); for very large datasets a different structure (hash map, balanced tree) might be warranted.
+| Problem | Fix |
+|---------|-----|
+| "Failed to open" CSV error | Make sure you're running from the project directory, or pass the full path to the CSV file |
+| Colors look wrong | Try `export COLOR_THEME=dark` or `export COLOR_THEME=light` |
+| Weird characters instead of box borders | Your terminal might not support Unicode. Try `export COLOR_THEME=mono` |
+| Build fails with C++ errors | Make sure you have a C++20 compiler. On macOS, run `xcode-select --install` |
+| Can't find the executable | It's in `build/Linked_List` (or `build/Release/Linked_List.exe` on Windows with VS) |
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.

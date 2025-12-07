@@ -2,7 +2,8 @@
 setlocal enabledelayedexpansion
 
 set SCRIPT_DIR=%~dp0
-set BUILD_DIR=%SCRIPT_DIR%build
+for %%I in ("%SCRIPT_DIR%..") do set PROJECT_DIR=%%~fI\
+set BUILD_DIR=%PROJECT_DIR%build
 
 rem Resize console for readability (override with env)
 set TARGET_COLS=%TARGET_COLS%
@@ -14,10 +15,10 @@ mode con: cols=%TARGET_COLS% lines=%TARGET_ROWS% >nul 2>&1
 if not exist "%BUILD_DIR%" mkdir "%BUILD_DIR%"
 
 rem Try Visual Studio 2022 generator first
-cmake -S "%SCRIPT_DIR%" -B "%BUILD_DIR%" -G "Visual Studio 17 2022" -A x64 >nul 2>&1
+cmake -S "%PROJECT_DIR%" -B "%BUILD_DIR%" -G "Visual Studio 17 2022" -A x64 >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
   echo Visual Studio 2022 not detected, trying MinGW Makefiles...
-  cmake -S "%SCRIPT_DIR%" -B "%BUILD_DIR%" -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release || goto :cmake_failed
+  cmake -S "%PROJECT_DIR%" -B "%BUILD_DIR%" -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release || goto :cmake_failed
   cmake --build "%BUILD_DIR%" --config Release || goto :build_failed
   set BIN="%BUILD_DIR%\Linked_List.exe"
 ) else (
@@ -30,17 +31,17 @@ if "%CSV%"=="" set CSV=eBid_Monthly_Sales.csv
 set BID=%2
 if "%BID%"=="" set BID=98109
 
-rem Resolve CSV relative to script dir; allow CLion debug fallback
+rem Resolve CSV relative to project dir; check data folder
 set "_ABS=%CSV%"
 for /f "delims=: tokens=1" %%A in ("%_ABS%") do set _DRIVE=%%A
 if "%_DRIVE%"=="%_ABS%" (
   rem No drive letter -> treat as relative
-  if not exist "%SCRIPT_DIR%%CSV%" (
-    if exist "%SCRIPT_DIR%cmake-build-debug\%CSV%" (
-      set CSV=cmake-build-debug\%CSV%
+  if not exist "%PROJECT_DIR%%CSV%" (
+    if exist "%PROJECT_DIR%data\%CSV%" (
+      set CSV=data\%CSV%
     )
   )
-  set CSV=%SCRIPT_DIR%%CSV%
+  set CSV=%PROJECT_DIR%%CSV%
 ) else (
   rem Has drive letter; leave as-is
 )

@@ -5,12 +5,8 @@
 /build/
 /build-*/
 
-# CLion build folders (keep sample CSVs only)
+# CLion/IDE build folders
 /cmake-build-*/
-!cmake-build-debug/
-cmake-build-debug/*
-!cmake-build-debug/*.csv
-!cmake-build-debug/*.CSV
 
 # CMake generated files (in case someone configures in-tree)
 CMakeFiles/

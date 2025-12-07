@@ -2,8 +2,6 @@
 // Name        : LinkedList.cpp
 // Author      : Justin Guida
 // Version     : 1.0
-// Copyright   : Copyright � 2023 SNHU CODE
-// Description : Lab 3-2 Lists and Searching
 //============================================================================
 
 #include <algorithm>
@@ -613,3 +611,4 @@ while (choice != 9) {
 
     return 0;
 }
+

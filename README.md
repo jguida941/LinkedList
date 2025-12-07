@@ -119,12 +119,9 @@ Linked_List [csvPath] [bidId]
 - **Missing CMake** – install via `brew install cmake` (macOS), the Visual Studio installer (Windows), or your Linux package manager.
 - **ANSI color codes visible** – set `COLOR_THEME=mono` (or `none`) or enable VT sequence support in the Windows console.
 - **Executable not found after build** – clean `build/` and re-run CMake; multi-config generators output under `build/<Config>/Linked_List`.
+- - **`CSVparser` is bundled locally**; no external runtime dependencies are required.
 
 ## Known Limitations & Ideas
 - The active bid ID is stored in memory and only changeable via the second command-line argument today.
 - All changes are ephemeral; saving back to CSV or exporting a filtered list would be a natural extension.
 - Searching is linear (`O(n)`); for very large datasets a different structure (hash map, balanced tree) might be warranted.
-
-## License & Attribution
-- Source code is © 2025 Justin Guida (adapted from SNHU coursework).
-- `CSVparser` is bundled locally; no external runtime dependencies are required.

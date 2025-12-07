@@ -2,6 +2,9 @@
 
 A C++ console application that manages municipal bid data using a custom singly linked list. Built as a data structures project, it demonstrates linked list operations, CSV parsing, and terminal UI design.
 
+https://github.com/user-attachments/assets/73748ff5-aec7-4447-accf-47674b68ed32
+
+
 ## Contents
 
 - [Features](#features)
@@ -22,6 +25,8 @@ A C++ console application that manages municipal bid data using a custom singly 
 - **Responsive layout** - Adjusts output width based on terminal size
 - **Unit tested** - Catch2 test suite covering linked list operations and input handling
 - **Cross-platform** - Works on macOS, Linux, and Windows
+
+
 
 ## Quick Start
 
@@ -97,6 +102,7 @@ The program automatically searches for `eBid_Monthly_Sales.csv` in common locati
 ├────────────────────────┤
 │ [9] Exit               │
 └────────────────────────┘
+
 ```
 
 - **[1] Enter Bid** - Manually add a new bid (checks for duplicates)

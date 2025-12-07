@@ -889,6 +889,15 @@ int main(int argc, char *argv[]) {
                 string removeId;
                 getline(cin, removeId);
 
+                // Trim whitespace
+                size_t startPos = removeId.find_first_not_of(" \t");
+                size_t endPos = removeId.find_last_not_of(" \t");
+                if (startPos != string::npos) {
+                    removeId = removeId.substr(startPos, endPos - startPos + 1);
+                } else {
+                    removeId = "";
+                }
+
                 if (removeId.empty()) {
                     displayResult("ERROR", {RED + "No ID entered." + RESET}, BOLD + RED);
                     cout << '\n';

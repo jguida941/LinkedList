@@ -7,6 +7,7 @@ A C++ console application that manages municipal bid data using a custom singly 
 - [Features](#features)
 - [Quick Start](#quick-start)
 - [Usage](#usage)
+- [Testing](#testing)
 - [How It Works](#how-it-works)
 - [Project Structure](#project-structure)
 - [Requirements](#requirements)
@@ -19,6 +20,7 @@ A C++ console application that manages municipal bid data using a custom singly 
 - **Colorized terminal output** - Auto-detects dark/light terminal themes, adapts colors accordingly
 - **Performance metrics** - Shows execution time for load and search operations
 - **Responsive layout** - Adjusts output width based on terminal size
+- **Unit tested** - Catch2 test suite covering linked list operations and input handling
 - **Cross-platform** - Works on macOS, Linux, and Windows
 
 ## Quick Start
@@ -119,6 +121,40 @@ export COLOR_THEME=light
 export COLOR_THEME=mono
 ```
 
+## Testing
+
+The project includes unit tests using [Catch2](https://github.com/catchorg/Catch2). Tests cover:
+- Whitespace trimming for user input
+- Linked list operations (append, prepend, search, remove)
+- Edge cases (empty lists, single elements, head/middle/tail removal)
+- Integration tests for ID lookup with whitespace
+
+### Running Tests
+
+```bash
+# Build with tests (enabled by default)
+cmake -S . -B build
+cmake --build build
+
+# Run all tests
+./build/tests
+
+# Run specific test categories
+./build/tests [trim]        # whitespace tests only
+./build/tests [linkedlist]  # linked list tests only
+./build/tests [integration] # integration tests only
+
+# List all available tests
+./build/tests --list-tests
+```
+
+### Disabling Tests
+
+To build without tests (faster build):
+```bash
+cmake -S . -B build -DBUILD_TESTS=OFF
+```
+
 ## How It Works
 
 ### Linked List
@@ -157,6 +193,8 @@ LinkedList/
 │   ├── LinkedList.cpp      # Main program, linked list, menu loop
 │   ├── CSVparser.cpp       # CSV file parser
 │   └── CSVparser.hpp
+├── tests/
+│   └── test_linkedlist.cpp # Unit tests (Catch2)
 ├── data/
 │   ├── eBid_Monthly_Sales.csv          # ~12,000 bid records
 │   └── eBid_Monthly_Sales_Dec_2016.csv # Smaller sample
